@@ -13,14 +13,31 @@ Tested on Vodafone RO (MCC/MNC 226-01), stock firmware base M215FXXS3CWK1.
 | IMS registration (VoLTE) | works |
 | Calls over IMS, outgoing and incoming (AMR-WB) | work |
 | SMS over IMS, send and receive | works |
-| Call audio on loudspeaker | usable, quality can improve |
-| Call audio on earpiece | **quiet, poor quality** (in progress) |
-| Call audio dropping mid-call | **known issue** (in progress) |
+| Call audio on earpiece and loudspeaker | clear, good volume |
+| No audio drops mid-call | fixed by ImsLteGuard (see below) |
+| 2G fallback where LTE is weak | automatic (ImsLteGuard) |
+| Touch haptics | fixed (were too weak) |
+| Main camera | 12 MP (4000x3000, HAL3 LIMITED); 48 MP mode not available |
 
-Why the audio needs work: ImsMedia runs call audio on the application
-processor. Samsung's audio HAL routes that as a VoIP call
-(`MODE_IN_COMMUNICATION`), which does not get the modem's call tuning. The
-call path is quieter and unprocessed as a result.
+### Why ImsLteGuard is needed
+
+The Samsung RIL on this device has no `IRadioIms`, so the modem is never told
+that IMS is registered or that a VoLTE call is running. As a voice-centric
+device it then thinks LTE has no voice service and drops to 2G every few
+minutes, even mid-call. SRVCC cannot happen, so the call goes silent.
+
+ImsLteGuard (a small privileged app in the device tree) disallows 2G while
+IMS voice is registered over LTE. If LTE is lost for 10 s, or IMS stays
+unregistered for 20 s, it allows 2G again so normal calls still work. It uses
+the `ENABLE_2G` restriction, so the user's preferred network type is left
+alone. Check it with `adb logcat -s ImsLteGuard`.
+
+### Call audio
+
+ImsMedia runs call audio on the application processor, which Samsung's audio
+HAL routes as a VoIP call (`MODE_IN_COMMUNICATION`) without the modem's call
+tuning. The earpiece analog gain is raised to the CP-call level in the mixer,
+and ImsMedia adds 6 dB digitally on the downlink.
 
 ## What changed versus upstream
 
@@ -32,13 +49,20 @@ All changes are on branch `volte` of these forks:
   - CarrierSettings as standalone package, as the ImsStack README describes
   - Removed an invisible U+200E character from a directory name
   - sepolicy: defined the missing `proc_irq` type
-  - Default ImsMedia call gain (`persist.radio.imsmedia.{rx,tx}_gain_db`)
+  - Default ImsMedia call gain (`persist.radio.imsmedia.{rx,tx}_gain_db`, 6/9 dB)
+  - ImsLteGuard: keep VoLTE on LTE, fall back to 2G where needed
+  - tinymix on userdebug builds
 - [android_vendor_samsung_universal9611-common](https://github.com/selvent12/android_vendor_samsung_universal9611-common/commits/volte)
   - `libsec-ril.so` without the SMSC nulling patch. With that patch,
     `GET_SMSC_ADDRESS` returns an empty string and SMS over IMS fails.
 - [android_device_samsung_m21](https://github.com/selvent12/android_device_samsung_m21/commits/volte)
   and [android_vendor_samsung_m21](https://github.com/selvent12/android_vendor_samsung_m21/commits/volte)
   - Import the `hardware/samsung` Soong namespace (libteecl)
+  - m21: earpiece gain for VoIP/IMS calls at CP-call level
+- [android_hardware_samsung](https://github.com/selvent12/android_hardware_samsung/commits/volte)
+  - Vibrator: don't shorten short pulses on ERM motors (weak touch haptics)
+- [ImsStack](https://github.com/selvent12/ImsStack/commits/volte)
+  - Temporary privapp allowlist entry for ImsLteGuard
 - [ImsMedia](https://github.com/selvent12/ImsMedia/commits/volte)
   - Optional per-direction digital gain for call audio, set through
     `persist.radio.imsmedia.rx_gain_db` / `tx_gain_db` (0 to 24 dB)
@@ -74,7 +98,7 @@ The output is `out/target/product/m21/lineage-23.2-*-UNOFFICIAL-m21.zip`.
 ImsMedia reads the gains when a call's audio starts:
 
 ```bash
-adb shell setprop persist.radio.imsmedia.rx_gain_db 6   # what you hear
+adb shell setprop persist.radio.imsmedia.rx_gain_db 6   # what you hear (default 6)
 adb shell setprop persist.radio.imsmedia.tx_gain_db 6   # what the other side hears
 ```
 

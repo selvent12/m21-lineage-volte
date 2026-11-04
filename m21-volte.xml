@@ -15,7 +15,7 @@
      revision="volte" />
 
   <!-- Hardware -->
-  <project path="hardware/samsung" name="android_hardware_samsung" remote="los" clone-depth="1" />
+  <project path="hardware/samsung" name="android_hardware_samsung" remote="m21volte" clone-depth="1" />
   <project path="hardware/samsung_slsi/libbt" name="android_hardware_samsung_slsi_libbt" remote="los" clone-depth="1" />
   <project path="hardware/samsung_slsi/nfc" name="android_hardware_samsung_slsi_nfc" remote="los" clone-depth="1" />
   <project path="hardware/samsung_slsi/scsc_wifibt/wifi_hal" name="android_hardware_samsung_slsi_scsc_wifibt_wifi_hal" remote="los" clone-depth="1" />
@@ -41,7 +41,7 @@
   <project path="vendor/samsung/m21" name="android_vendor_samsung_m21" remote="m21volte" clone-depth="1" />
 
   <!-- Open-source IMS stack -->
-  <project path="packages/modules/ImsStack" name="krazey/ImsStack" remote="github" revision="main" />
+  <project path="packages/modules/ImsStack" name="ImsStack" remote="m21volte" />
   <remove-project name="platform/packages/modules/ImsMedia" />
   <project path="packages/modules/ImsMedia" name="ImsMedia" remote="m21volte" />
   <project path="packages/apps/CarrierSettings" name="krazey/CarrierSettings" remote="github" revision="main" />
