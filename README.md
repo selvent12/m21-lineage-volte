@@ -17,6 +17,7 @@ Tested on Vodafone RO (MCC/MNC 226-01), stock firmware base M215FXXS3CWK1.
 | No audio drops mid-call | fixed by ImsLteGuard (see below) |
 | 2G fallback where LTE is weak | automatic (ImsLteGuard) |
 | Touch haptics | fixed (were too weak) |
+| Offline charging | works, shows battery percentage |
 | GPS | works outdoors (first fix ~1 min, no A-GPS); weak indoors, same as stock |
 | Main camera | 12 MP (4000x3000, HAL3 LIMITED); 48 MP mode not available |
 
