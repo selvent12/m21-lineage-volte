@@ -37,7 +37,7 @@ alone. Check it with `adb logcat -s ImsLteGuard`.
 ImsMedia runs call audio on the application processor, which Samsung's audio
 HAL routes as a VoIP call (`MODE_IN_COMMUNICATION`) without the modem's call
 tuning. The earpiece analog gain is raised to the CP-call level in the mixer,
-and ImsMedia adds 7 dB digitally on the downlink.
+and ImsMedia adds 6 dB digitally on the downlink.
 
 ## What changed versus upstream
 
@@ -49,7 +49,7 @@ All changes are on branch `volte` of these forks:
   - CarrierSettings as standalone package, as the ImsStack README describes
   - Removed an invisible U+200E character from a directory name
   - sepolicy: defined the missing `proc_irq` type
-  - Default ImsMedia call gain (`persist.radio.imsmedia.{rx,tx}_gain_db`, 7/9 dB)
+  - Default ImsMedia call gain (`persist.radio.imsmedia.{rx,tx}_gain_db`, 6/9 dB)
   - ImsLteGuard: keep VoLTE on LTE, fall back to 2G where needed
   - tinymix on userdebug builds
 - [android_vendor_samsung_universal9611-common](https://github.com/selvent12/android_vendor_samsung_universal9611-common/commits/volte)
@@ -98,7 +98,7 @@ The output is `out/target/product/m21/lineage-23.2-*-UNOFFICIAL-m21.zip`.
 ImsMedia reads the gains when a call's audio starts:
 
 ```bash
-adb shell setprop persist.radio.imsmedia.rx_gain_db 6   # what you hear (default 7)
+adb shell setprop persist.radio.imsmedia.rx_gain_db 6   # what you hear (default 6)
 adb shell setprop persist.radio.imsmedia.tx_gain_db 6   # what the other side hears
 ```
 
