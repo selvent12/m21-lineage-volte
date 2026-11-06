@@ -32,6 +32,25 @@ unregistered for 20 s, it allows 2G again so normal calls still work. It uses
 the `ENABLE_2G` restriction, so the user's preferred network type is left
 alone. Check it with `adb logcat -s ImsLteGuard`.
 
+Safety rules:
+
+- When an emergency call is dialed, 2G is allowed immediately and stays
+  allowed until the call is over, so a circuit-switched emergency call is
+  possible.
+- On every start (boot, crash, SIM change) 2G is allowed first. LTE-only is
+  set again only once IMS voice on LTE is confirmed.
+
+### Not tested
+
+These have **not** been tested on this build. Do not rely on them without
+checking yourself:
+
+- **Emergency calls (112).** The 2G release logic is in place, but no real
+  emergency call was made (test calls to 112 are not allowed).
+- Operators other than Vodafone RO (Orange, Digi, ...).
+- VoWiFi, roaming, dual-SIM with two active SIMs.
+- Uplink gain (9 dB): judged only by the far end, not measured.
+
 ### Call audio
 
 ImsMedia runs call audio on the application processor, which Samsung's audio
@@ -62,7 +81,8 @@ All changes are on branch `volte` of these forks:
 - [android_hardware_samsung](https://github.com/selvent12/android_hardware_samsung/commits/volte)
   - Vibrator: don't shorten short pulses on ERM motors (weak touch haptics)
 - [ImsStack](https://github.com/selvent12/ImsStack/commits/volte)
-  - Temporary privapp allowlist entry for ImsLteGuard
+  - (A temporary privapp entry for ImsLteGuard was added and reverted; the
+    branch is otherwise upstream)
 - [ImsMedia](https://github.com/selvent12/ImsMedia/commits/volte)
   - Optional per-direction digital gain for call audio, set through
     `persist.radio.imsmedia.rx_gain_db` / `tx_gain_db` (0 to 24 dB)
@@ -82,6 +102,17 @@ m bacon
 ```
 
 The output is `out/target/product/m21/lineage-23.2-*-UNOFFICIAL-m21.zip`.
+
+### Reproducible build (pinned)
+
+`m21-volte.xml` follows the `volte`/`main` branches. To rebuild exactly the
+tested build (`lineage-23.2-20261106`), use the pinned snapshot instead, which
+fixes every project to a commit SHA:
+
+```bash
+curl -L -o .repo/local_manifests/m21-volte.xml \
+  https://raw.githubusercontent.com/selvent12/m21-lineage-volte/main/m21-volte-pinned.xml
+```
 
 ## Install
 
