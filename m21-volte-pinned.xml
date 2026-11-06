@@ -3,7 +3,7 @@
   Drop this file into .repo/local_manifests/ of a lineage-23.2 checkout.
 --><!--
   Pinned snapshot of m21-volte.xml: exact commits of the tested build
-  lineage-23.2-20261106-UNOFFICIAL-m21.
+  lineage-23.2-20261106-UNOFFICIAL-m21 (release m21-volte-20261106).
   LineageOS android manifest (lineage-23.2) at 9776e518de506f610218c4caa6c1fddff46873af.
 -->
 <manifest>
@@ -29,7 +29,7 @@
   <project path="kernel/samsung/universal9611" name="android_kernel_samsung_universal9611" remote="Development" revision="23f87fb36310eee5e8ec5e27a3a0cd089209cbb4" clone-depth="1" upstream="AOSP"/>
 
   <!-- Device trees (VoLTE changes on branch "volte") -->
-  <project path="device/samsung/universal9611-common" name="android_device_samsung_universal9611-common" remote="m21volte" revision="7b00ccb94d9084256eaf7b05e612fde955f05209"/>
+  <project path="device/samsung/universal9611-common" name="android_device_samsung_universal9611-common" remote="m21volte" revision="b4ff9251893be88d177af89474f5c856862a1c01"/>
   <project path="device/samsung_slsi/sepolicy" name="android_device_samsung_slsi_sepolicy" remote="los" revision="2658c386ceb4f58e78fa0e985d9a8aec073972e7"/>
   <project path="device/samsung/m21" name="android_device_samsung_m21" remote="m21volte" revision="ae5fe87c68b81fe04994f0427853c56b3e57ba0e"/>
 

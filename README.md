@@ -17,6 +17,7 @@ Tested on Vodafone RO (MCC/MNC 226-01), stock firmware base M215FXXS3CWK1.
 | No audio drops mid-call | fixed by ImsLteGuard (see below) |
 | 2G fallback where LTE is weak | automatic (ImsLteGuard) |
 | Touch haptics | fixed (were too weak) |
+| GPS | works outdoors (first fix ~1 min, no A-GPS); weak indoors, same as stock |
 | Main camera | 12 MP (4000x3000, HAL3 LIMITED); 48 MP mode not available |
 
 ### Why ImsLteGuard is needed
@@ -50,6 +51,19 @@ checking yourself:
 - Operators other than Vodafone RO (Orange, Digi, ...).
 - VoWiFi, roaming, dual-SIM with two active SIMs.
 - Uplink gain (9 dB): judged only by the far end, not measured.
+
+### GPS
+
+The M21's GPS receiver is weak indoors on stock firmware too. Compared at the
+same spot, phone held out of a window:
+
+| | Stock (CWK1) | This build |
+|---|---|---|
+| Time to first fix | 141 s | 54 s |
+| Top-4 avg C/N0 | 34.8 dB-Hz | 40.0 dB-Hz |
+
+A-GPS (SUPL) fails with `Cert NOT verified` on both, so the first fix takes
+about a minute instead of seconds.
 
 ### Call audio
 
