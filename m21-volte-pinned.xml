@@ -3,7 +3,7 @@
   Drop this file into .repo/local_manifests/ of a lineage-23.2 checkout.
 --><!--
   Pinned snapshot of m21-volte.xml: exact commits of the tested build
-  lineage-23.2-20261106-UNOFFICIAL-m21 (release m21-volte-20261106).
+  lineage-23.2-20261108-UNOFFICIAL-m21 (release m21-volte-20261108).
   LineageOS android manifest (lineage-23.2) at 9776e518de506f610218c4caa6c1fddff46873af.
 -->
 <manifest>
@@ -29,13 +29,17 @@
   <project path="kernel/samsung/universal9611" name="android_kernel_samsung_universal9611" remote="Development" revision="23f87fb36310eee5e8ec5e27a3a0cd089209cbb4" clone-depth="1" upstream="AOSP"/>
 
   <!-- Device trees (VoLTE changes on branch "volte") -->
-  <project path="device/samsung/universal9611-common" name="android_device_samsung_universal9611-common" remote="m21volte" revision="b4ff9251893be88d177af89474f5c856862a1c01"/>
+  <project path="device/samsung/universal9611-common" name="android_device_samsung_universal9611-common" remote="m21volte" revision="84d0502980820e42d2e76441c814a06eebd0f095"/>
   <project path="device/samsung_slsi/sepolicy" name="android_device_samsung_slsi_sepolicy" remote="los" revision="2658c386ceb4f58e78fa0e985d9a8aec073972e7"/>
   <project path="device/samsung/m21" name="android_device_samsung_m21" remote="m21volte" revision="ae5fe87c68b81fe04994f0427853c56b3e57ba0e"/>
 
   <!-- Vendor trees -->
   <project path="vendor/samsung/universal9611-common" name="android_vendor_samsung_universal9611-common" remote="m21volte" clone-depth="1" revision="f728368f93b9b61a2124548ee5a1999eb48cd3c2"/>
   <project path="vendor/samsung/m21" name="android_vendor_samsung_m21" remote="m21volte" clone-depth="1" revision="eef05a4510b7e734537f263dd4c83ae1e9561a22"/>
+
+  <!-- Telephony framework: release 2G for CS USSD -->
+  <remove-project name="LineageOS/android_frameworks_opt_telephony"/>
+  <project path="frameworks/opt/telephony" name="android_frameworks_opt_telephony" remote="m21volte" groups="pdk,sysui-studio" revision="264adcc415e0f0cbe0e16bfc9818e1be2dc2123e"/>
 
   <!-- Open-source IMS stack -->
   <project path="packages/modules/ImsStack" name="ImsStack" remote="m21volte" revision="c8f842be6bdb908146db3fd8407a2fd5d3b1efe2"/>

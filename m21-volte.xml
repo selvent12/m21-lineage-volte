@@ -40,6 +40,10 @@
   <project path="vendor/samsung/universal9611-common" name="android_vendor_samsung_universal9611-common" remote="m21volte" clone-depth="1" />
   <project path="vendor/samsung/m21" name="android_vendor_samsung_m21" remote="m21volte" clone-depth="1" />
 
+  <!-- Telephony framework: release 2G for CS USSD -->
+  <remove-project name="LineageOS/android_frameworks_opt_telephony" />
+  <project path="frameworks/opt/telephony" name="android_frameworks_opt_telephony" remote="m21volte" groups="pdk,sysui-studio" />
+
   <!-- Open-source IMS stack -->
   <project path="packages/modules/ImsStack" name="ImsStack" remote="m21volte" />
   <remove-project name="platform/packages/modules/ImsMedia" />

@@ -15,7 +15,8 @@ Tested on Vodafone RO (MCC/MNC 226-01), stock firmware base M215FXXS3CWK1.
 | SMS over IMS, send and receive | works |
 | Call audio on earpiece and loudspeaker | clear, good volume |
 | No audio drops mid-call | fixed by ImsLteGuard (see below) |
-| 2G fallback where LTE is weak | automatic (ImsLteGuard) |
+| USSD codes | work through a short 2G fallback; VoLTE is unavailable for up to about a minute afterwards |
+| 2G fallback where LTE is weak | automatic (ImsLteGuard), not field-tested |
 | Touch haptics | fixed (were too weak) |
 | Offline charging | works, shows battery percentage |
 | GPS | works outdoors (first fix ~1 min, no A-GPS); weak indoors, same as stock |
@@ -49,9 +50,26 @@ checking yourself:
 
 - **Emergency calls (112).** The 2G release logic is in place, but no real
   emergency call was made (test calls to 112 are not allowed).
+- Automatic 2G fallback in an area with weak LTE (2G was only exercised for USSD).
 - Operators other than Vodafone RO (Orange, Digi, ...).
 - VoWiFi, roaming, dual-SIM with two active SIMs.
 - Uplink gain (9 dB): judged only by the far end, not measured.
+
+### USSD
+
+Android sends USSD over the circuit-switched network, which on LTE needs a
+fallback to 2G. Disallowing 2G for VoLTE stability therefore made every code
+fail with "connection problem or invalid MMI code". USSD over IMS was tested
+too, but Vodafone RO rejects it (`Unallocated number`, then `480`).
+
+From build 20261108, telephony announces each USSD request to ImsLteGuard. It
+allows 2G at once and keeps it allowed for 30 s after the latest request, so
+menus keep working. If 2G was blocked, the request waits 2 s
+(`persist.radio.imslteguard.ussd_delay_ms`) before being sent.
+
+Side effect: while the phone is on 2G, IMS is down. In one measured run VoLTE
+was unavailable for about 48 s, so incoming calls can be missed during that
+time.
 
 ### GPS
 
@@ -95,6 +113,8 @@ All changes are on branch `volte` of these forks:
   - m21: earpiece gain for VoIP/IMS calls at CP-call level
 - [android_hardware_samsung](https://github.com/selvent12/android_hardware_samsung/commits/volte)
   - Vibrator: don't shorten short pulses on ERM motors (weak touch haptics)
+- [android_frameworks_opt_telephony](https://github.com/selvent12/android_frameworks_opt_telephony/commits/volte)
+  - Announce circuit-switched USSD requests to ImsLteGuard and wait for 2G
 - [ImsStack](https://github.com/selvent12/ImsStack/commits/volte)
   - (A temporary privapp entry for ImsLteGuard was added and reverted; the
     branch is otherwise upstream)
@@ -121,7 +141,7 @@ The output is `out/target/product/m21/lineage-23.2-*-UNOFFICIAL-m21.zip`.
 ### Reproducible build (pinned)
 
 `m21-volte.xml` follows the `volte`/`main` branches. To rebuild exactly the
-tested build (`lineage-23.2-20261106`), use the pinned snapshot instead, which
+tested build (`lineage-23.2-20261108`), use the pinned snapshot instead, which
 fixes every project to a commit SHA:
 
 ```bash
