@@ -19,6 +19,7 @@ Tested on Vodafone RO (MCC/MNC 226-01), stock firmware base M215FXXS3CWK1.
 | 2G fallback where LTE is weak | automatic (ImsLteGuard), not field-tested |
 | Touch haptics | fixed (were too weak) |
 | Offline charging | works, shows battery percentage |
+| Screen brightness | manual only: the M21 has no light sensor (stock estimated light with the camera) |
 | GPS | works outdoors (first fix ~1 min, no A-GPS); weak indoors, same as stock |
 | Main camera | 12 MP (4000x3000, HAL3 LIMITED); 48 MP mode not available |
 
@@ -111,6 +112,9 @@ All changes are on branch `volte` of these forks:
   and [android_vendor_samsung_m21](https://github.com/selvent12/android_vendor_samsung_m21/commits/volte)
   - Import the `hardware/samsung` Soong namespace (libteecl)
   - m21: earpiece gain for VoIP/IMS calls at CP-call level
+  - m21: device overlays now override the common ones. Five m21 values were
+    silently shadowed: automatic brightness (shown but useless without a light
+    sensor), minimum and doze brightness, and the rounded corner radii
 - [android_hardware_samsung](https://github.com/selvent12/android_hardware_samsung/commits/volte)
   - Vibrator: don't shorten short pulses on ERM motors (weak touch haptics)
 - [android_frameworks_opt_telephony](https://github.com/selvent12/android_frameworks_opt_telephony/commits/volte)
@@ -141,7 +145,7 @@ The output is `out/target/product/m21/lineage-23.2-*-UNOFFICIAL-m21.zip`.
 ### Reproducible build (pinned)
 
 `m21-volte.xml` follows the `volte`/`main` branches. To rebuild exactly the
-tested build (`lineage-23.2-20261108`), use the pinned snapshot instead, which
+tested build (`lineage-23.2-20261110`), use the pinned snapshot instead, which
 fixes every project to a commit SHA:
 
 ```bash
