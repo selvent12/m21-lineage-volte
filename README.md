@@ -13,6 +13,7 @@ Tested on Vodafone RO (MCC/MNC 226-01), stock firmware base M215FXXS3CWK1.
 | IMS registration (VoLTE) | works |
 | Calls over IMS, outgoing and incoming (AMR-WB) | work |
 | SMS over IMS, send and receive | works |
+| VoWiFi (Wi-Fi calling) | works |
 | Call audio on earpiece and loudspeaker | clear, good volume |
 | No audio drops mid-call | fixed by ImsLteGuard (see below) |
 | USSD codes | work through a short 2G fallback; VoLTE is unavailable for up to about a minute afterwards |
@@ -53,7 +54,7 @@ checking yourself:
   emergency call was made (test calls to 112 are not allowed).
 - Automatic 2G fallback in an area with weak LTE (2G was only exercised for USSD).
 - Operators other than Vodafone RO (Orange, Digi, ...).
-- VoWiFi, roaming, dual-SIM with two active SIMs.
+- Roaming, dual-SIM with two active SIMs.
 - Uplink gain (9 dB): judged only by the far end, not measured.
 
 ### USSD
